@@ -1,6 +1,6 @@
 import { Box, Button, LinearProgress, TextField, Typography } from "@mui/material"
 import { useState } from "react";
-import { useLoginCardController } from "./use-login-card-controller";
+import { useLoginCardController } from "./use-login-controller";
 import { useNavigate } from "react-router";
 
 export const LoginCard = () => {
@@ -9,7 +9,7 @@ export const LoginCard = () => {
 	const [username, setUsername] = useState<string>("");
 	const [password, setPassword] = useState<string>("");
 
-	const { login, loading, data } = useLoginCardController(username, password);
+	const { mutate: login, isPending } = useLoginCardController(username, password);
 
 	return (
 		<Box
@@ -39,7 +39,7 @@ export const LoginCard = () => {
 				px={4}
 				onSubmit={(e) => {
 					e.preventDefault();
-					login();
+					!isPending && login();
 				}}
 			>
 				<TextField
@@ -52,15 +52,15 @@ export const LoginCard = () => {
 					size="small"
 					type="password"
 					onChange={(e) => setPassword(e.target.value)}
-					onKeyDown={(e) => e.key === "Enter" && login()}
 				/>
 				<Button
+					disabled={isPending}
 					size="small"
 					color="primary"
 					variant="contained"
 					type="submit"
 					sx={{ minHeight: "32px" }}
-				> {loading ?
+				> {isPending ?
 					<LinearProgress sx={{ width: '100%' }} /> :
 					"Login"}
 				</Button>

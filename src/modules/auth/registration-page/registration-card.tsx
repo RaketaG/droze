@@ -13,10 +13,8 @@ export const RegistrationCard = () => {
 	const [fullName, setFullName] = useState<string>("");
 
 
-	const { register, loading, error, data } = useRegistrationCardController(
-		username, password, email, phone, fullName);
-
-	console.log(data);
+	const { mutate, isPending } = useRegistrationCardController(
+		{ username, password, email, phone, role: "restorator", fullName });
 
 	return (
 		<>
@@ -56,7 +54,7 @@ export const RegistrationCard = () => {
 					px={4}
 					onSubmit={(e) => {
 						e.preventDefault();
-						register();
+						!isPending && mutate();
 					}}
 				>
 					<TextField
@@ -97,12 +95,10 @@ export const RegistrationCard = () => {
 						variant="contained"
 						type="submit"
 						sx={{ minHeight: "32px" }}
-					> {loading ?
+					> {isPending ?
 						<LinearProgress sx={{ width: '100%' }} /> :
 						"Create account"}
 					</Button>
-
-					{data && <Typography>{`username: ${data.username} \n id: ${data.id}`}</Typography>}
 				</Box >
 			</Box>
 		</>
