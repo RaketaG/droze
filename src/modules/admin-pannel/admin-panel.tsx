@@ -1,7 +1,7 @@
 import { Navigate } from "react-router";
 import useAuth from "../../hooks/use-auth";
 import { Box, Button, Grid, Menu, MenuItem } from "@mui/material";
-import { VenuesListCard } from "../../components/venues-list-card";
+import { VenueListCard } from "../../components/venue-list-card/venue-list-card";
 import { useLogoutCardController } from "../auth/login-page/use-logout-controller";
 import { useState } from "react";
 
@@ -53,7 +53,7 @@ export const AdminPanel = () => {
             </Box>
             <Grid container spacing={2} padding={2}>
                 <Grid size={6}>
-                    <VenuesListCard />
+                    <VenueListCard />
                 </Grid>
                 <Grid size={6}>
                 </Grid>

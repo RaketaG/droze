@@ -12,16 +12,15 @@ import {
     Typography
 } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
-import { useQuery } from "@tanstack/react-query";
-import { listVenues } from "../api/venues-api";
-import useAuth from "../hooks/use-auth";
+import { useVenueListCardController } from "./use-venue-list-card-controller";
+import { AddVenueModal } from "./add-venue-modal";
+import { useState } from "react";
 
-export const VenuesListCard = () => {
-    const { accessToken } = useAuth();
 
-    const result = useQuery({ queryKey: ['venues'], queryFn: () => listVenues(accessToken) })
-    console.log("gocha", result.data)
+export const VenueListCard = () => {
+    const { data: rows } = useVenueListCardController();
 
+    const [isOpen, setIsOpen] = useState<boolean>(false);
     return (
         <Box
             component="section"
@@ -32,8 +31,9 @@ export const VenuesListCard = () => {
             borderRadius={3}
             padding={3}
             boxShadow={1}
-            height={"30vh"}
+            minHeight={"30vh"}
         >
+            <AddVenueModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
             <Box
                 border={1}
                 padding={1}
@@ -44,7 +44,7 @@ export const VenuesListCard = () => {
                 <Typography>
                     Your Venues
                 </Typography>
-                <Button sx={{ padding: 0 }} onClick={() => result.refetch()}>
+                <Button sx={{ padding: 0 }} onClick={() => setIsOpen(true)}>
                     <AddIcon />
                 </Button>
             </Box>
@@ -69,12 +69,16 @@ export const VenuesListCard = () => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            <TableRow>
-                                <TableCell>Gocha</TableCell>
-                                <TableCell>Gocha</TableCell>
-                                <TableCell>Gocha</TableCell>
-                                <TableCell>Gocha</TableCell>
-                            </TableRow>
+                            {
+                                rows?.map((row) => (
+                                    <TableRow key={row.id}>
+                                        <TableCell>{row.name}</TableCell>
+                                        <TableCell>{row.address}</TableCell>
+                                        <TableCell>{row.email}</TableCell>
+                                        <TableCell>{row.phone}</TableCell>
+                                    </TableRow>
+                                ))
+                            }
                         </TableBody>
                     </Table>
                 </Box>
@@ -82,8 +86,8 @@ export const VenuesListCard = () => {
                 <TablePagination
                     rowsPerPageOptions={[10, 50]}
                     component="div"
-                    count={3}
-                    rowsPerPage={3}
+                    count={1}
+                    rowsPerPage={10}
                     page={1}
                     onPageChange={() => { }}
                     onRowsPerPageChange={() => { }}
