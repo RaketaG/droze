@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query"
-import { addVenue, type VenueBodyType } from "../../api/venues-api"
+import { addVenue, changeVenueDetails, type VenueBodyType, type VenueListType } from "../../api/venues-api"
 import useAuth from "../../hooks/use-auth"
 import { useNavigate } from "react-router";
 
@@ -7,7 +7,7 @@ export const useAddVenueModal = () => {
     const { accessToken, userId } = useAuth();
     const navigate = useNavigate();
 
-    const mutant = useMutation({
+    const addVenueMutation = useMutation({
         mutationFn: (body: Omit<VenueBodyType, "userId">) => addVenue({
             ...body,
             userId
@@ -15,5 +15,16 @@ export const useAddVenueModal = () => {
         onSuccess: () => navigate(0)
     });
 
-    return mutant;
+    const changeVenueDetailsMutation = useMutation({
+        mutationFn: (body: Omit<VenueListType, "userId">) => changeVenueDetails({
+            ...body,
+            userId
+        }, accessToken),
+        onSuccess: () => navigate(0)
+    });
+
+    return {
+        changeVenueDetailsMutation,
+        addVenueMutation
+    };
 }

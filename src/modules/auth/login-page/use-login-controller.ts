@@ -13,7 +13,7 @@ export const useLoginCardController = (username: string, password: string) => {
 	const navigate = useNavigate();
 	const { setAccessToken, setUserId, setRole } = useAuth();
 
-	const mutant = useMutation({
+	const loginMutation = useMutation({
 		mutationFn: () => login({ username, password }),
 		onSuccess: (data) => {
 			const decode = jwtDecode<CustomJwtPayload>(data.accessToken);
@@ -26,5 +26,5 @@ export const useLoginCardController = (username: string, password: string) => {
 		}
 	});
 
-	return mutant;
+	return loginMutation;
 };

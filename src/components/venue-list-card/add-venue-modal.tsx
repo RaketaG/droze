@@ -5,10 +5,13 @@ import { useAddVenueModal } from "./use-add-venue-modal";
 import { addVenueInitialValues, addVenueValueValidator } from "./add-venue-formik-config";
 
 export const AddVenueModal = (
-	{ isOpen, onClose }:
-		{ isOpen: boolean, onClose: () => void }
+	{ isOpen, onClose, changeDetails }:
+		{ isOpen: boolean, onClose: () => void, changeDetails?: any | undefined }
 ) => {
-	const { mutate: addVenue } = useAddVenueModal()
+	const {
+		changeVenueDetailsMutation,
+		addVenueMutation
+	} = useAddVenueModal();
 
 	return (
 		<Modal
@@ -21,10 +24,13 @@ export const AddVenueModal = (
 			}}
 		>
 			<Formik
-				initialValues={addVenueInitialValues}
+				initialValues={changeDetails ? changeDetails : addVenueInitialValues}
+				enableReinitialize
 				validationSchema={addVenueValueValidator}
 				onSubmit={(values, { setSubmitting }) => {
-					addVenue(values)
+					changeDetails ?
+						changeVenueDetailsMutation.mutate(values) :
+						addVenueMutation.mutate(values);
 					setSubmitting(false);
 				}}
 			>

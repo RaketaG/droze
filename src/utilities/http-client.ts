@@ -1,19 +1,45 @@
+import useAuth from "../hooks/use-auth";
+import router from "../routs/router";
+
 const request = async (
     path: string, accessToken?: string, options?: RequestInit
 ) => {
+    const authState = useAuth.getState();
+    const requestSkeleton = async (token?: string) => {
+        return await fetch(`/api${path}`, {
+            headers: {
+                "Content-Type": "application/json",
+                ...(token && { Authorization: `Bearer ${token}` }),
+                ...options?.headers,
+            },
+            ...options,
+        });
+    };
 
-    const response = await fetch(`/api${path}`, {
-        headers: {
-            "Content-Type": "application/json",
-            ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
-            ...options?.headers,
-        },
-        ...options,
-    });
+    const response = await requestSkeleton(accessToken);
+
+    if (response.status === 401) {
+        const refresh = await fetch("/api/refresh", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+        });
+        if (!refresh.ok) throw new Error(`Request failed: ${response.statusText}`);
+
+        const { accessToken: newAccessToken } = await refresh.json();
+        authState.setAccessToken(newAccessToken);
+
+        const newResponse = await requestSkeleton(newAccessToken);
+
+        if (!newResponse.ok) {
+            router.navigate("/login");
+            throw new Error(`Request failed: ${newResponse.statusText}`);
+        }
+        return newResponse.json()
+    }
 
     if (!response.ok) throw new Error(`Request failed: ${response.statusText}`);
     return response.json();
-}
+};
 
 export const http = {
     get: (path: string, accessToken?: string, options?: RequestInit) =>

@@ -12,15 +12,20 @@ import {
     Typography
 } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 import { useVenueListCardController } from "./use-venue-list-card-controller";
 import { AddVenueModal } from "./add-venue-modal";
 import { useState } from "react";
+import type { VenueListType } from "../../api/venues-api";
 
 
 export const VenueListCard = () => {
-    const { data: rows } = useVenueListCardController();
+    const { data: rows, mutant } = useVenueListCardController();
 
     const [isOpen, setIsOpen] = useState<boolean>(false);
+    const [changeDetailsBody, setChangeDetailsBody] = useState<VenueListType | undefined>();
+
     return (
         <Box
             component="section"
@@ -33,7 +38,11 @@ export const VenueListCard = () => {
             boxShadow={1}
             minHeight={"30vh"}
         >
-            <AddVenueModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
+            <AddVenueModal
+                isOpen={isOpen}
+                onClose={() => setIsOpen(false)}
+                changeDetails={changeDetailsBody}
+            />
             <Box
                 border={1}
                 padding={1}
@@ -44,7 +53,10 @@ export const VenueListCard = () => {
                 <Typography>
                     Your Venues
                 </Typography>
-                <Button sx={{ padding: 0 }} onClick={() => setIsOpen(true)}>
+                <Button sx={{ padding: 0 }} onClick={() => {
+                    setChangeDetailsBody(undefined);
+                    setIsOpen(true);
+                }}>
                     <AddIcon />
                 </Button>
             </Box>
@@ -66,6 +78,7 @@ export const VenueListCard = () => {
                                 <TableCell>Address</TableCell>
                                 <TableCell>Email</TableCell>
                                 <TableCell>Phone</TableCell>
+                                <TableCell>Edit / Delete</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -76,6 +89,17 @@ export const VenueListCard = () => {
                                         <TableCell>{row.address}</TableCell>
                                         <TableCell>{row.email}</TableCell>
                                         <TableCell>{row.phone}</TableCell>
+                                        <TableCell>
+                                            <Button onClick={() => {
+                                                setChangeDetailsBody(row);
+                                                setIsOpen(true);
+                                            }}>
+                                                <EditIcon />
+                                            </Button>
+                                            <Button onClick={() => mutant.mutate(row.id)}>
+                                                <DeleteIcon />
+                                            </Button>
+                                        </TableCell>
                                     </TableRow>
                                 ))
                             }
