@@ -1,4 +1,4 @@
-import { TextField, type TextFieldProps } from "@mui/material";
+import { Box, TextField, Typography, type TextFieldProps } from "@mui/material";
 import { useField } from "formik"
 
 export const DrozeTextField = (
@@ -7,14 +7,19 @@ export const DrozeTextField = (
     const [field, meta] = useField(props.name as string);
 
     return (
-        <>
+        <Box>
             <TextField
                 {...props}
                 {...field}
+                error={(meta.touched && meta.error) as boolean}
             />
-            {meta.touched && meta.error ? (
-                <div className="error">{meta.error}</div>
-            ) : null}
-        </>
+            <Typography
+                color="error"
+                fontSize={12}
+                minHeight={18}
+            >
+                {meta.touched && meta.error ? meta.error : ""}
+            </Typography>
+        </Box>
     );
 };

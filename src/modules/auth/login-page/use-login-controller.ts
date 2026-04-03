@@ -9,12 +9,13 @@ interface CustomJwtPayload extends JwtPayload {
 	userRole: string;
 };
 
-export const useLoginCardController = (username: string, password: string) => {
+export const useLoginCardController = () => {
 	const navigate = useNavigate();
 	const { setAccessToken, setUserId, setRole } = useAuth();
 
 	const loginMutation = useMutation({
-		mutationFn: () => login({ username, password }),
+		mutationFn: ({ username, password }: { username: string, password: string }) => 
+			login({ username, password }),
 		onSuccess: (data) => {
 			const decode = jwtDecode<CustomJwtPayload>(data.accessToken);
 

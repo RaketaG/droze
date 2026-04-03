@@ -1,7 +1,6 @@
 import {
     Box,
     Button,
-    Paper,
     Table,
     TableBody,
     TableCell,
@@ -9,6 +8,7 @@ import {
     TableHead,
     TablePagination,
     TableRow,
+    Tooltip,
     Typography
 } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
@@ -19,12 +19,33 @@ import { AddVenueModal } from "./add-venue-modal";
 import { useState } from "react";
 import type { VenueListType } from "../../api/venues-api";
 
+const tableCellSx = {
+    overflow: "hidden",
+    textOverflow: "ellipsis", whiteSpace: "nowrap",
+};
+
+const CellWithTooltip = ({ populateText }: { populateText: string }) => {
+    return (
+        <TableCell sx={tableCellSx}>
+            <Tooltip title={populateText} arrow placement="bottom-start">
+                <Typography variant="subtitle2">{populateText}</Typography>
+            </Tooltip>
+        </TableCell>
+    );
+};
 
 export const VenueListCard = () => {
     const { data: rows, mutant } = useVenueListCardController();
 
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const [changeDetailsBody, setChangeDetailsBody] = useState<VenueListType | undefined>();
+
+    const [selectedRowId, setSelectedRowId] = useState<string>("");
+
+    const [page, setPage] = useState<number>(0);
+
+    const rowsPerPage = 5;
+    const visibleRows = rows?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) ?? [];
 
     return (
         <Box
@@ -36,7 +57,8 @@ export const VenueListCard = () => {
             borderRadius={3}
             padding={3}
             boxShadow={1}
-            minHeight={"30vh"}
+            width={800}
+            height={393}
         >
             <AddVenueModal
                 isOpen={isOpen}
@@ -60,63 +82,63 @@ export const VenueListCard = () => {
                     <AddIcon />
                 </Button>
             </Box>
-            <TableContainer
-                component={Paper}
-                sx={{
-
-                    flex: 1,
-                    display: "flex",
-                    flexDirection: "column",
-                    overflow: "hidden",
-                }}
+            <Box
+                component="section"
+                boxShadow={1}
+                borderRadius={3}
+                flex={1}
+                display="flex"
+                flexDirection="column"
             >
-                <Box sx={{ flex: 1, overflow: "auto" }}>
-                    <Table stickyHeader aria-label="venues">
+                <TableContainer sx={{ flex: 1 }}>
+                    <Table size="small" sx={{ tableLayout: "fixed" }}>
                         <TableHead>
                             <TableRow>
-                                <TableCell>Name</TableCell>
-                                <TableCell>Address</TableCell>
-                                <TableCell>Email</TableCell>
-                                <TableCell>Phone</TableCell>
-                                <TableCell>Edit / Delete</TableCell>
+                                <TableCell sx={tableCellSx}>Name</TableCell>
+                                <TableCell sx={tableCellSx}>Address</TableCell>
+                                <TableCell sx={tableCellSx}>Email</TableCell>
+                                <TableCell sx={tableCellSx}>Phone</TableCell>
+                                <TableCell sx={tableCellSx} align="center">Edit / Delete</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {
-                                rows?.map((row) => (
-                                    <TableRow key={row.id}>
-                                        <TableCell>{row.name}</TableCell>
-                                        <TableCell>{row.address}</TableCell>
-                                        <TableCell>{row.email}</TableCell>
-                                        <TableCell>{row.phone}</TableCell>
-                                        <TableCell>
-                                            <Button onClick={() => {
-                                                setChangeDetailsBody(row);
-                                                setIsOpen(true);
-                                            }}>
-                                                <EditIcon />
-                                            </Button>
-                                            <Button onClick={() => mutant.mutate(row.id)}>
-                                                <DeleteIcon />
-                                            </Button>
-                                        </TableCell>
-                                    </TableRow>
-                                ))
-                            }
+                            {visibleRows.map((row) => (
+                                <TableRow
+                                    key={row.id} hover selected={selectedRowId === row.id}
+                                    onClick={() => {
+                                        setSelectedRowId(prev => prev === row.id ? "" : row.id);
+                                    }}
+                                >
+                                    <CellWithTooltip populateText={row.name} />
+                                    <CellWithTooltip populateText={row.address} />
+                                    <CellWithTooltip populateText={row.email} />
+                                    <CellWithTooltip populateText={row.phone} />
+                                    <TableCell sx={tableCellSx}>
+                                        <Button onClick={() => {
+                                            setChangeDetailsBody(row);
+                                            setIsOpen(true);
+                                        }}>
+                                            <EditIcon />
+                                        </Button>
+                                        <Button onClick={() => mutant.mutate(row.id)}>
+                                            <DeleteIcon />
+                                        </Button>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
                         </TableBody>
                     </Table>
-                </Box>
+                </TableContainer>
 
                 <TablePagination
-                    rowsPerPageOptions={[10, 50]}
                     component="div"
-                    count={1}
-                    rowsPerPage={10}
-                    page={1}
-                    onPageChange={() => { }}
-                    onRowsPerPageChange={() => { }}
+                    rowsPerPageOptions={[]}
+                    count={rows?.length ?? 0}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onPageChange={(_, newPage) => setPage(newPage)}
                 />
-            </TableContainer>
-        </Box>
+            </Box>
+        </Box >
     );
 };

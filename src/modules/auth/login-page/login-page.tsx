@@ -1,15 +1,14 @@
-import { Box, Button, LinearProgress, TextField, Typography } from "@mui/material"
-import { useState } from "react";
+import { Box, Button, LinearProgress, Typography } from "@mui/material";
+import * as Yup from "yup";
 import { useLoginCardController } from "./use-login-controller";
 import { useNavigate } from "react-router";
+import { Form, Formik } from "formik";
+import { DrozeTextField } from "../../../components/droze-text-field/droze-text-field";
 
 export const LoginCard = () => {
 	const navigate = useNavigate();
 
-	const [username, setUsername] = useState<string>("");
-	const [password, setPassword] = useState<string>("");
-
-	const { mutate: login, isPending } = useLoginCardController(username, password);
+	const { mutate: login, isPending } = useLoginCardController();
 
 	return (
 		<Box
@@ -29,48 +28,61 @@ export const LoginCard = () => {
 				<Typography fontSize={68}>droze.</Typography>
 			</Box>
 
-			<Box
-				maxWidth={350}
-				flex="3 1 0"
-				component="form"
-				display="flex"
-				flexDirection={"column"}
-				gap={1}
-				px={4}
-				onSubmit={(e) => {
-					e.preventDefault();
-					!isPending && login();
+			<Formik
+				initialValues={{
+					username: "",
+					password: "",
+				}}
+				validationSchema={Yup.object({
+					username: Yup.string().required("Required"),
+					password: Yup.string().required("Required")
+				})}
+				onSubmit={(values, { setSubmitting }) => {
+					!isPending && login(values);
+					setSubmitting(false);
 				}}
 			>
-				<TextField
-					placeholder="username"
-					size="small"
-					onChange={(e) => setUsername(e.target.value)}
-				/>
-				<TextField
-					placeholder="Password"
-					size="small"
-					type="password"
-					onChange={(e) => setPassword(e.target.value)}
-				/>
-				<Button
-					disabled={isPending}
-					size="small"
-					color="primary"
-					variant="contained"
-					type="submit"
-					sx={{ minHeight: "32px" }}
-				> {isPending ?
-					<LinearProgress sx={{ width: '100%' }} /> :
-					"Login"}
-				</Button>
-				<Button
-					size="small"
-					color="primary"
-					variant="text"
-					onClick={() => navigate("/registration")}
-				> Create an account </Button>
-			</Box >
-		</Box>
+				<Form>
+					<Box
+						maxWidth={350}
+						flex="3 1 0"
+						display="flex"
+						flexDirection={"column"}
+						px={4}
+					>
+						<DrozeTextField
+							fullWidth
+							name="username"
+							placeholder="Username"
+							size="small"
+						/>
+						<DrozeTextField
+							fullWidth
+							name="password"
+							placeholder="Password"
+							type="password"
+							size="small"
+						/>
+						<Button
+							disabled={isPending}
+							size="small"
+							color="primary"
+							variant="contained"
+							type="submit"
+							sx={{ minHeight: "32px" }}
+						> {isPending ?
+							<LinearProgress sx={{ width: '100%' }} /> :
+							"Login"}
+						</Button>
+						<Button
+							size="small"
+							color="primary"
+							variant="text"
+							onClick={() => navigate("/registration")}
+						> Create an account </Button>
+					</Box >
+				</Form>
+			</Formik>
+		</Box >
 	);
 };
