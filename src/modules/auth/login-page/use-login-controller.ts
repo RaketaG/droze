@@ -6,22 +6,38 @@ import { jwtDecode, type JwtPayload } from "jwt-decode";
 
 interface CustomJwtPayload extends JwtPayload {
 	userId: string;
-	userRole: string;
+	userRole: "admin" | "restorator" | "user";
+	username: string;
+	email: string;
+	phone: string;
+	fullName: string;
 };
 
 export const useLoginCardController = () => {
 	const navigate = useNavigate();
-	const { setAccessToken, setUserId, setRole } = useAuth();
+	const {
+		setAccessToken,
+		setUserId,
+		setUserRole,
+		setUsername,
+		setUserEmail,
+		setUserPhone,
+		setUserFullName,
+	} = useAuth();
 
 	const loginMutation = useMutation({
-		mutationFn: ({ username, password }: { username: string, password: string }) => 
+		mutationFn: ({ username, password }: { username: string, password: string }) =>
 			login({ username, password }),
 		onSuccess: (data) => {
 			const decode = jwtDecode<CustomJwtPayload>(data.accessToken);
 
 			setAccessToken(data.accessToken);
 			setUserId(decode?.userId);
-			setRole(decode?.userRole);
+			setUserRole(decode?.userRole);
+			setUsername(decode?.username);
+			setUserEmail(decode?.email);
+			setUserPhone(decode?.phone);
+			setUserFullName(decode?.fullName);
 
 			navigate("/admin-panel");
 		}

@@ -4,10 +4,18 @@ import { persist } from "zustand/middleware";
 type UseAuthType = {
     accessToken: string;
     userId: string;
-    role: string;
+    userRole: string;
+    username: string;
+    userEmail: string;
+    userPhone: string;
+    userFullName: string;
     setAccessToken: (newAccessToken: string) => void;
     setUserId: (newUserId: string) => void;
-    setRole: (newRole: string) => void;
+    setUserRole: (newRole: string) => void;
+    setUsername: (newRole: string) => void;
+    setUserEmail: (newRole: string) => void;
+    setUserPhone: (newRole: string) => void;
+    setUserFullName: (newRole: string) => void;
 };
 
 const useAuth = create<UseAuthType>()(
@@ -15,10 +23,18 @@ const useAuth = create<UseAuthType>()(
         (set) => ({
             accessToken: "",
             userId: "",
-            role: "",
+            userRole: "",
+            username: "",
+            userEmail: "",
+            userPhone: "",
+            userFullName: "",
             setAccessToken: (accessToken) => set({ accessToken }),
             setUserId: (userId) => set({ userId }),
-            setRole: (role) => set({ role })
+            setUserRole: (userRole) => set({ userRole }),
+            setUsername: (username) => set({ username }),
+            setUserEmail: (userEmail) => set({ userEmail }),
+            setUserPhone: (userPhone) => set({ userPhone }),
+            setUserFullName: (userFullName) => set({ userFullName })
         }),
         { name: "auth-storage" }
     )

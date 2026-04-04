@@ -6,7 +6,9 @@ import { useLogoutCardController } from "../auth/login-page/use-logout-controlle
 import { DrozeAdminCard } from "../../components/droze-admin-card/droze-admin-card";
 
 export const AdminPanel = () => {
-    const { accessToken, role } = useAuth();
+    const {
+        accessToken, username, userEmail, userPhone, userRole
+    } = useAuth();
     const { logoutMutation } = useLogoutCardController();
 
     if (!accessToken) return <Navigate to="/login" replace />
@@ -28,10 +30,10 @@ export const AdminPanel = () => {
             >
                 <VenueListCard />
                 <DrozeAdminCard
-                    username={"gocxha"}
-                    email={"mandarin@email.com"}
-                    phone={"+123412341234"}
-                    role={role}
+                    username={username}
+                    email={userEmail}
+                    phone={userPhone}
+                    role={userRole}
                     logout={logoutMutation}
                 />
             </Box>
