@@ -14,38 +14,51 @@ import {
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import { useVenueListCardController } from "./use-venue-list-card-controller";
+import { useVenueListCardController } from "./use-venue-list-section-controller";
 import { AddVenueModal } from "./add-venue-modal";
-import { useState } from "react";
-import type { VenueListType } from "../../api/venues-api";
-
-const tableCellSx = {
-    overflow: "hidden",
-    textOverflow: "ellipsis", whiteSpace: "nowrap",
-};
+import { DrozeDialogBox } from "../droze-dialog-box/droze-dialog-box";
 
 const CellWithTooltip = ({ populateText }: { populateText: string }) => {
     return (
-        <TableCell sx={tableCellSx}>
+        <TableCell>
             <Tooltip title={populateText} arrow placement="bottom-start">
-                <Typography variant="subtitle2">{populateText}</Typography>
+                <Typography variant="subtitle2" noWrap>{populateText}</Typography>
             </Tooltip>
         </TableCell>
     );
 };
 
+const TableHeadCellText = ({ populateText }: { populateText: string }) => {
+    return (
+        <Typography
+            variant="subtitle2"
+            fontWeight="bold"
+            color="primary"
+        >
+            {populateText}
+        </Typography>
+    );
+};
+
 export const VenueListCard = () => {
-    const { data: rows, mutant } = useVenueListCardController();
-
-    const [isOpen, setIsOpen] = useState<boolean>(false);
-    const [changeDetailsBody, setChangeDetailsBody] = useState<VenueListType | undefined>();
-
-    const [selectedRowId, setSelectedRowId] = useState<string>("");
-
-    const [page, setPage] = useState<number>(0);
-
-    const rowsPerPage = 5;
-    const visibleRows = rows?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) ?? [];
+    const {
+        isAddChangeOpen,
+        setIsAddChangeOpen,
+        changeDetailsBody,
+        setChangeDetailsBody,
+        deleteDialogSettings,
+        setDeleteDialogSettings,
+        selectedRowId,
+        setSelectedRowId,
+        page,
+        setPage,
+        rows,
+        addVenueMutation,
+        changeVenueDetailsMutation,
+        deleteVenueMutate,
+        rowsPerPage,
+        visibleRows
+    } = useVenueListCardController();
 
     return (
         <Box
@@ -53,21 +66,38 @@ export const VenueListCard = () => {
             display="flex"
             flexDirection="column"
             gap={2}
-            border={1}
             borderRadius={3}
             padding={3}
-            boxShadow={1}
+            boxShadow={4}
             width={800}
             height={393}
         >
+            <DrozeDialogBox
+                isOpen={deleteDialogSettings.isOpen}
+                handleClose={() => setDeleteDialogSettings({
+                    isOpen: false,
+                    venueId: ""
+                })}
+                handleAction={() => {
+                    deleteVenueMutate(deleteDialogSettings.venueId);
+                }}
+                titleText="You are deleting the venue."
+                contentText="This action is ireversible,
+                    after you delete the venue the only way 
+                    to get all the information back is to set up it from scratch."
+                positiveBtnText="Confirm Delete"
+                negativeBtnText="Cancel"
+            />
             <AddVenueModal
-                isOpen={isOpen}
-                onClose={() => setIsOpen(false)}
+                isOpen={isAddChangeOpen}
+                onClose={() => setIsAddChangeOpen(false)}
+                changeDetailsAction={changeVenueDetailsMutation}
+                AddVenueAction={addVenueMutation}
                 changeDetails={changeDetailsBody}
             />
             <Box
-                border={1}
-                padding={1}
+                boxShadow={2}
+                px={2} py={1}
                 borderRadius={3}
                 display="flex"
                 justifyContent="space-between"
@@ -77,14 +107,14 @@ export const VenueListCard = () => {
                 </Typography>
                 <Button sx={{ padding: 0 }} onClick={() => {
                     setChangeDetailsBody(undefined);
-                    setIsOpen(true);
+                    setIsAddChangeOpen(true);
                 }}>
                     <AddIcon />
                 </Button>
             </Box>
             <Box
                 component="section"
-                boxShadow={1}
+                boxShadow={2}
                 borderRadius={3}
                 flex={1}
                 display="flex"
@@ -94,11 +124,21 @@ export const VenueListCard = () => {
                     <Table size="small" sx={{ tableLayout: "fixed" }}>
                         <TableHead>
                             <TableRow>
-                                <TableCell sx={tableCellSx}>Name</TableCell>
-                                <TableCell sx={tableCellSx}>Address</TableCell>
-                                <TableCell sx={tableCellSx}>Email</TableCell>
-                                <TableCell sx={tableCellSx}>Phone</TableCell>
-                                <TableCell sx={tableCellSx} align="center">Edit / Delete</TableCell>
+                                <TableCell>
+                                    <TableHeadCellText populateText="Venue Name" />
+                                </TableCell>
+                                <TableCell>
+                                    <TableHeadCellText populateText="Address" />
+                                </TableCell>
+                                <TableCell>
+                                    <TableHeadCellText populateText="Email" />
+                                </TableCell>
+                                <TableCell>
+                                    <TableHeadCellText populateText="Phone" />
+                                </TableCell>
+                                <TableCell align="center">
+                                    <TableHeadCellText populateText="Edit / Delete" />
+                                </TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -113,14 +153,19 @@ export const VenueListCard = () => {
                                     <CellWithTooltip populateText={row.address} />
                                     <CellWithTooltip populateText={row.email} />
                                     <CellWithTooltip populateText={row.phone} />
-                                    <TableCell sx={tableCellSx}>
+                                    <TableCell>
                                         <Button onClick={() => {
                                             setChangeDetailsBody(row);
-                                            setIsOpen(true);
+                                            setIsAddChangeOpen(true);
                                         }}>
                                             <EditIcon />
                                         </Button>
-                                        <Button onClick={() => mutant.mutate(row.id)}>
+                                        <Button color="error" onClick={() =>
+                                            setDeleteDialogSettings({
+                                                isOpen: true,
+                                                venueId: row.id
+                                            })
+                                        }>
                                             <DeleteIcon />
                                         </Button>
                                     </TableCell>

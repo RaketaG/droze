@@ -41,9 +41,8 @@ export const RegistrationCard = () => {
 				<Formik
 					initialValues={initialValues}
 					validationSchema={validationSchema}
-					onSubmit={(values, { setSubmitting }) => {
+					onSubmit={(values) => {
 						register(values);
-						setSubmitting(false);
 					}}
 				>
 					<Form>

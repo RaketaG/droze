@@ -6,7 +6,7 @@ import { logout } from "../../../api/auth-api";
 export const useLogoutCardController = () => {
 	const navigate = useNavigate();
 
-	const mutant = useMutation({
+	const { mutate: logoutMutation } = useMutation({
 		mutationFn: logout,
 		onSuccess: () => {
 			useAuth.persist.clearStorage();
@@ -14,5 +14,7 @@ export const useLogoutCardController = () => {
 		}
 	});
 
-	return mutant;
+	return {
+		logoutMutation
+	};
 };

@@ -1,65 +1,40 @@
 import { Navigate } from "react-router";
 import useAuth from "../../hooks/use-auth";
-import { Box, Button, Grid, Menu, MenuItem } from "@mui/material";
-import { VenueListCard } from "../../components/venue-list-card/venue-list-card";
+import { Box, Typography } from "@mui/material";
+import { VenueListCard } from "../../components/venue-list-card/venue-list-section";
 import { useLogoutCardController } from "../auth/login-page/use-logout-controller";
-import { useState } from "react";
+import { DrozeAdminCard } from "../../components/droze-admin-card/droze-admin-card";
 
 export const AdminPanel = () => {
-    const { accessToken } = useAuth();
-    const { mutate: logout } = useLogoutCardController();
-
-    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-    const open = Boolean(anchorEl);
-    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-        setAnchorEl(event.currentTarget);
-    };
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
+    const { accessToken, role } = useAuth();
+    const { logoutMutation } = useLogoutCardController();
 
     if (!accessToken) return <Navigate to="/login" replace />
 
     return (
-        <>
+        <Box
+            component="article"
+            p={8}
+            display="flex"
+            flexDirection="column"
+            justifyContent="center"
+            alignItems="center"
+        >
+            <Typography variant="h3" color="primary" mb={8}>droze. Restorator Pannel</Typography>
             <Box
-                component="nav"
                 display="flex"
-                justifyContent="flex-end"
-                padding={4}
+                justifyContent="center"
+                gap={3}
             >
-                <Box
-                    border={1}
-                    borderRadius={10}
-                    width={60}
-                    height={60}
-                    display="flex"
-                >
-                    <Button onClick={handleClick}>User</Button>
-                </Box>
-                <Menu
-                    id="basic-menu"
-                    anchorEl={anchorEl}
-                    open={open}
-                    onClose={handleClose}
-                    slotProps={{
-                        list: {
-                            'aria-labelledby': 'basic-button',
-                        },
-                    }}
-                >
-                    <MenuItem onClick={() => logout()}>Logout</MenuItem>
-                </Menu>
+                <VenueListCard />
+                <DrozeAdminCard
+                    username={"gocxha"}
+                    email={"mandarin@email.com"}
+                    phone={"+123412341234"}
+                    role={role}
+                    logout={logoutMutation}
+                />
             </Box>
-            <Grid container spacing={2} padding={2}>
-                <Grid size={6}>
-                    <VenueListCard />
-                </Grid>
-                <Grid size={6}>
-                </Grid>
-                <Grid size={12}>
-                </Grid>
-            </Grid>
-        </>
+        </Box>
     )
 };
