@@ -16,10 +16,9 @@ export default defineConfig({
     allowedHosts: ['ratatoskr.asuscomm.com'],
     proxy: {
       "/api": {
-        target: "https://34.159.133.242",
+        target: "http://localhost:3000",
         secure: false,
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ""),
       }
     }
   }

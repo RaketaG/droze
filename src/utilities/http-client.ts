@@ -23,7 +23,10 @@ const request = async (
             method: "POST",
             headers: { "Content-Type": "application/json" },
         });
-        if (!refresh.ok) throw new Error(`Request failed: ${response.statusText}`);
+        if (!refresh.ok) {
+            router.navigate("/login");
+            throw new Error(`Request failed: ${response.statusText}`);
+        }
 
         const { accessToken: newAccessToken } = await refresh.json();
         authState.setAccessToken(newAccessToken);
@@ -34,7 +37,7 @@ const request = async (
             router.navigate("/login");
             throw new Error(`Request failed: ${newResponse.statusText}`);
         }
-        return newResponse.json()
+        return newResponse.json();
     }
 
     if (!response.ok) throw new Error(`Request failed: ${response.statusText}`);
