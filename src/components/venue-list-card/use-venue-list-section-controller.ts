@@ -2,9 +2,11 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { addVenue, changeVenueDetails, deleteVenue, venueList, type VenueBodyType, type VenueListType } from "../../api/venues-api";
 import useAuth from "../../hooks/use-auth"
 import { useState } from "react";
+import { useToast } from "../toast";
 
 export const useVenueListCardController = () => {
     const { accessToken, userId } = useAuth();
+    const { showToast } = useToast();
 
     const [isAddChangeOpen, setIsAddChangeOpen] = useState<boolean>(false);
     const [changeDetailsBody, setChangeDetailsBody] = useState<VenueListType | undefined>();
@@ -33,6 +35,11 @@ export const useVenueListCardController = () => {
         }, accessToken),
         onSuccess: () => {
             refetchRows();
+            showToast("Venue Added Successfully", "success");
+            setIsAddChangeOpen(false);
+        },
+        onError: (error) => {
+            showToast(error.message, "error");
             setIsAddChangeOpen(false);
         }
     });
@@ -44,6 +51,11 @@ export const useVenueListCardController = () => {
         }, accessToken),
         onSuccess: () => {
             refetchRows();
+            showToast("Details Changed Successfully", "success");
+            setIsAddChangeOpen(false);
+        },
+        onError: (error) => {
+            showToast(error.message, "error");
             setIsAddChangeOpen(false);
         }
     });
@@ -53,10 +65,14 @@ export const useVenueListCardController = () => {
         mutationFn: (venueId: string) => deleteVenue(venueId, accessToken),
         onSuccess: () => {
             refetchRows();
+            showToast("Details Changed Successfully", "success");
             setDeleteDialogSettings({
                 isOpen: false,
                 venueId: ""
             });
+        },
+        onError: (error) => {
+            showToast(error.message, "error");
         }
     });
 

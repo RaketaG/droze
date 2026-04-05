@@ -1,8 +1,8 @@
 import { createContext, useContext, useState } from "react";
-import { Snackbar, Alert } from "@mui/material";
+import { Snackbar, Alert, type AlertColor } from "@mui/material";
 
 type ToastContextType = {
-  showToast: (message: string) => void;
+  showToast: (message: string, severity: AlertColor) => void;
 };
 
 const ToastContext = createContext<ToastContextType | null>(null);
@@ -12,9 +12,11 @@ export const useToast = () => useContext(ToastContext)!;
 export const ToastProvider = ({ children }: { children: React.ReactNode }) => {
   const [message, setMessage] = useState<string>("");
   const [open, setOpen] = useState(false);
+  const [severity, setSeverity] = useState<AlertColor>("success");
 
-  const showToast = (msg: string) => {
+  const showToast = (msg: string, severity: AlertColor) => {
     setMessage(msg);
+    severity && setSeverity(severity);
     setOpen(true);
   };
 
@@ -28,7 +30,7 @@ export const ToastProvider = ({ children }: { children: React.ReactNode }) => {
         onClose={() => setOpen(false)}
         anchorOrigin={{ vertical: "top", horizontal: "right" }}
       >
-        <Alert severity="success" variant="filled">
+        <Alert severity={severity} variant="filled">
           {message}
         </Alert>
       </Snackbar>

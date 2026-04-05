@@ -102,7 +102,7 @@ export const VenueListCard = () => {
                 display="flex"
                 justifyContent="space-between"
             >
-                <Typography>
+                <Typography color="primary" fontWeight="bold">
                     Your Venues
                 </Typography>
                 <Button sx={{ padding: 0 }} onClick={() => {

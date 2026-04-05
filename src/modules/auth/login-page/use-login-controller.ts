@@ -3,6 +3,7 @@ import { useNavigate } from "react-router";
 import { useMutation } from "@tanstack/react-query";
 import { login } from "../../../api/auth-api";
 import { jwtDecode, type JwtPayload } from "jwt-decode";
+import { useToast } from "../../../components/toast";
 
 interface CustomJwtPayload extends JwtPayload {
 	userId: string;
@@ -15,6 +16,9 @@ interface CustomJwtPayload extends JwtPayload {
 
 export const useLoginCardController = () => {
 	const navigate = useNavigate();
+
+	const { showToast } = useToast();
+
 	const {
 		setAccessToken,
 		setUserId,
@@ -38,6 +42,8 @@ export const useLoginCardController = () => {
 			setUserEmail(decode?.email);
 			setUserPhone(decode?.phone);
 			setUserFullName(decode?.fullName);
+
+			showToast("Login Successful");
 
 			navigate("/admin-panel");
 		}
