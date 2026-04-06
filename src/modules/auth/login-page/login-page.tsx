@@ -13,76 +13,85 @@ export const LoginCard = () => {
 	return (
 		<Box
 			height="100vh"
+			width={"100vw"}
 			component="article"
 			display="flex"
+			justifyContent="center"
 			alignItems="center"
-
+			boxSizing="border-box"
 		>
 			<Box
-				flex="7 1 0"
-				component="section"
 				display="flex"
-				justifyContent="center"
+				flexDirection="row"
+				justifyContent="space-around"
 				alignItems="center"
+				width={650}
+				boxShadow={4}
+				padding={8}
+				borderRadius={3}
 			>
 				<Typography fontSize={68}>droze.</Typography>
-			</Box>
 
-			<Formik
-				initialValues={{
-					username: "",
-					password: "",
-				}}
-				validationSchema={Yup.object({
-					username: Yup.string().required("Required"),
-					password: Yup.string().required("Required")
-				})}
-				onSubmit={(values, { setSubmitting }) => {
-					!isPending && login(values);
-					setSubmitting(false);
-				}}
-			>
-				<Form>
-					<Box
-						maxWidth={350}
-						flex="3 1 0"
-						display="flex"
-						flexDirection={"column"}
-						px={4}
+				<Box
+					width={0.6}
+					padding={4}
+					boxSizing="border-box"
+				>
+					<Formik
+						initialValues={{
+							username: "",
+							password: "",
+						}}
+						validationSchema={Yup.object({
+							username: Yup.string().required("Required"),
+							password: Yup.string().required("Required")
+						})}
+						onSubmit={(values) => {
+							!isPending && login({
+								...values,
+								username: values.username.toLowerCase(),
+							});
+						}}
 					>
-						<DrozeTextField
-							fullWidth
-							name="username"
-							placeholder="Username"
-							size="small"
-						/>
-						<DrozeTextField
-							fullWidth
-							name="password"
-							placeholder="Password"
-							type="password"
-							size="small"
-						/>
-						<Button
-							disabled={isPending}
-							size="small"
-							color="primary"
-							variant="contained"
-							type="submit"
-							sx={{ minHeight: "32px" }}
-						> {isPending ?
-							<LinearProgress sx={{ width: '100%' }} /> :
-							"Login"}
-						</Button>
-						<Button
-							size="small"
-							color="primary"
-							variant="text"
-							onClick={() => navigate("/registration")}
-						> Create an account </Button>
-					</Box >
-				</Form>
-			</Formik>
+						<Form>
+							<Box
+								display="flex"
+								flexDirection={"column"}
+								boxSizing="border-box"
+							>
+								<DrozeTextField
+									name="username"
+									placeholder="Username"
+									size="small"
+								/>
+								<DrozeTextField
+									name="password"
+									placeholder="Password"
+									type="password"
+									size="small"
+								/>
+								<Button
+									disabled={isPending}
+									size="small"
+									color="primary"
+									variant="contained"
+									type="submit"
+									sx={{ minHeight: "32px" }}
+								> {isPending ?
+									<LinearProgress sx={{ width: '100%' }} /> :
+									"Login"}
+								</Button>
+								<Button
+									size="small"
+									color="primary"
+									variant="text"
+									onClick={() => navigate("/registration")}
+								> Create an account </Button>
+							</Box >
+						</Form>
+					</Formik>
+				</Box>
+			</Box >
 		</Box >
 	);
 };

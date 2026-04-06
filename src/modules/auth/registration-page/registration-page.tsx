@@ -25,83 +25,97 @@ export const RegistrationCard = () => {
 
 			<Box
 				height="100vh"
+				width={"100vw"}
 				component="article"
 				display="flex"
+				justifyContent="center"
 				alignItems="center"
+				boxSizing="border-box"
 			>
 				<Box
-					flex="7 1 0"
-					component="section"
 					display="flex"
-					justifyContent="center"
+					flexDirection="row"
+					justifyContent="space-around"
 					alignItems="center"
+					width={650}
+					boxShadow={4}
+					padding={8}
+					borderRadius={3}
 				>
 					<Typography fontSize={68}>droze.</Typography>
-				</Box>
-				<Formik
-					initialValues={initialValues}
-					validationSchema={validationSchema}
-					onSubmit={(values) => {
-						register(values);
-					}}
-				>
-					<Form>
-						<Box
-							maxWidth={350}
-							flex="3 1 0"
-							display="flex"
-							flexDirection={"column"}
-							px={4}
+
+					<Box
+						width={0.6}
+						padding={4}
+						boxSizing="border-box"
+					>
+						<Formik
+							initialValues={initialValues}
+							validationSchema={validationSchema}
+							onSubmit={(values) => {
+								register({
+									...values,
+									username: values.username!.toLowerCase(),
+								});
+							}}
 						>
-							<DrozeTextField
-								name="username"
-								placeholder="Username"
-								size="small"
-							/>
-							<DrozeTextField
-								name="password"
-								placeholder="Password"
-								size="small"
-								type="password"
-							/>
-							<DrozeTextField
-								name="email"
-								placeholder="Email"
-								size="small"
-							/>
-							<DrozeTextField
-								name="phone"
-								placeholder="Phone"
-								size="small"
-							/>
-							<DrozeTextField
-								name="role"
-								placeholder="Role"
-								size="small"
-								slotProps={{
-									input: {
-										readOnly: true,
-									}
-								}}
-							/>
-							<DrozeTextField
-								name="fullName"
-								placeholder="Full Name"
-								size="small"
-							/>
-							<Button
-								size="small"
-								color="primary"
-								variant="contained"
-								type="submit"
-								sx={{ minHeight: "32px" }}
-							> {isPending ?
-								<LinearProgress sx={{ width: '100%' }} /> :
-								"Create account"}
-							</Button>
-						</Box >
-					</Form>
-				</Formik>
+							<Form>
+								<Box
+									maxWidth={320}
+									display="flex"
+									flexDirection="column"
+								>
+									<DrozeTextField
+										name="username"
+										placeholder="Username"
+										size="small"
+									/>
+									<DrozeTextField
+										name="password"
+										placeholder="Password"
+										size="small"
+										type="password"
+									/>
+									<DrozeTextField
+										name="email"
+										placeholder="Email"
+										size="small"
+									/>
+									<DrozeTextField
+										name="phone"
+										placeholder="Phone"
+										size="small"
+									/>
+									<DrozeTextField
+										name="role"
+										placeholder="Role"
+										size="small"
+										slotProps={{
+											input: {
+												readOnly: true,
+											}
+										}}
+									/>
+									<DrozeTextField
+										name="fullName"
+										placeholder="Full Name"
+										size="small"
+									/>
+									<Button
+										size="small"
+										color="primary"
+										variant="contained"
+										type="submit"
+										sx={{ minHeight: "32px" }}
+									> {isPending ?
+										<LinearProgress sx={{ width: '100%' }} /> :
+										"Create account"}
+									</Button>
+								</Box >
+							</Form>
+						</Formik>
+					</Box>
+				</Box>
 			</Box>
 		</>
 	);
