@@ -17,15 +17,17 @@ const request = async (
     };
 
     const response = await requestSkeleton(accessToken);
+    const responseJson = await response.json();
 
-    if (response.status === 401) {
+    if (response.status === 401 && responseJson.error === "Invalid accessToken.") {
         const refresh = await fetch("/api/refresh", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
         });
         if (!refresh.ok) {
             router.navigate("/login");
-            throw new Error(`Request failed: ${response.statusText}`);
+            const refreshJson = await refresh.json();
+            throw new Error(`Request failed: ${refreshJson.error}`);
         }
 
         const { accessToken: newAccessToken } = await refresh.json();
@@ -35,13 +37,14 @@ const request = async (
 
         if (!newResponse.ok) {
             router.navigate("/login");
-            throw new Error(`Request failed: ${newResponse.statusText}`);
+            const newResponseJson = await newResponse.json();
+            throw new Error(`Request failed: ${newResponseJson.error}`);
         }
         return newResponse.json();
     }
 
-    if (!response.ok) throw new Error(`Request failed: ${response.statusText}`);
-    return response.json();
+    if (!response.ok) throw new Error(`Request failed: ${responseJson.error}`);
+    return responseJson;
 };
 
 export const http = {

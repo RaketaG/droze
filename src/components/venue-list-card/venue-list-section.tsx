@@ -8,7 +8,6 @@ import {
     TableHead,
     TablePagination,
     TableRow,
-    Tooltip,
     Typography
 } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
@@ -17,28 +16,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import { useVenueListCardController } from "./use-venue-list-section-controller";
 import { AddVenueModal } from "./add-venue-modal";
 import { DrozeDialogBox } from "../droze-dialog-box/droze-dialog-box";
-
-const CellWithTooltip = ({ populateText }: { populateText: string }) => {
-    return (
-        <TableCell>
-            <Tooltip title={populateText} arrow placement="bottom-start">
-                <Typography variant="subtitle2" noWrap>{populateText}</Typography>
-            </Tooltip>
-        </TableCell>
-    );
-};
-
-const TableHeadCellText = ({ populateText }: { populateText: string }) => {
-    return (
-        <Typography
-            variant="subtitle2"
-            fontWeight="bold"
-            color="primary"
-        >
-            {populateText}
-        </Typography>
-    );
-};
+import { CellWithTooltip, TableHeadCellText } from "../droze-table-helpers/droze-table-helpers";
 
 export const VenueListCard = () => {
     const {
@@ -146,7 +124,7 @@ export const VenueListCard = () => {
                                 <TableRow
                                     key={row.id} hover selected={selectedRowId === row.id}
                                     onClick={() => {
-                                        setSelectedRowId(prev => prev === row.id ? "" : row.id);
+                                        selectedRowId === row.id ? setSelectedRowId("") : setSelectedRowId(row.id);
                                     }}
                                 >
                                     <CellWithTooltip populateText={row.name} />

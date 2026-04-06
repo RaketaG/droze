@@ -24,6 +24,14 @@ export const DrozeDialogBox = (
         <Dialog
             open={isOpen}
             onClose={handleClose}
+            slotProps={{
+                paper: {
+                    sx: {
+                        borderRadius: 3,
+                        padding: 2
+                    }
+                }
+            }}
         >
             <DialogTitle>{titleText}</DialogTitle>
             <DialogContent>
@@ -37,6 +45,6 @@ export const DrozeDialogBox = (
                     {positiveBtnText || "Confirm"}
                 </Button>
             </DialogActions>
-        </Dialog>
+        </Dialog >
     )
 };

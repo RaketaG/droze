@@ -46,6 +46,10 @@ export const useLoginCardController = () => {
 			showToast("Login Successful", "success");
 
 			navigate("/admin-panel");
+		},
+		onError(error) {
+			console.log(error)
+			showToast(error.message, "error");
 		}
 	});
 

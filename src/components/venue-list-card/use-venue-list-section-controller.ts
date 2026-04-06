@@ -3,10 +3,13 @@ import { addVenue, changeVenueDetails, deleteVenue, venueList, type VenueBodyTyp
 import useAuth from "../../hooks/use-auth"
 import { useState } from "react";
 import { useToast } from "../toast";
+import useManage from "../../hooks/use-manage";
 
 export const useVenueListCardController = () => {
     const { accessToken, userId } = useAuth();
     const { showToast } = useToast();
+
+    const { venueId: selectedRowId, setVenueId: setSelectedRowId } = useManage();
 
     const [isAddChangeOpen, setIsAddChangeOpen] = useState<boolean>(false);
     const [changeDetailsBody, setChangeDetailsBody] = useState<VenueListType | undefined>();
@@ -18,8 +21,6 @@ export const useVenueListCardController = () => {
         isOpen: false,
         venueId: ""
     });
-
-    const [selectedRowId, setSelectedRowId] = useState<string>("");
 
     const [page, setPage] = useState<number>(0);
 

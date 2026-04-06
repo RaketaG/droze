@@ -4,6 +4,8 @@ import { Box, Typography } from "@mui/material";
 import { VenueListCard } from "../../components/venue-list-card/venue-list-section";
 import { useLogoutCardController } from "../auth/login-page/use-logout-controller";
 import { DrozeAdminCard } from "../../components/droze-admin-card/droze-admin-card";
+import { MenuCategoriesListSection } from "../../components/menu-categoris-section/menu-categories-section";
+import { MenuItemsList } from "../../components/menu-items-section/menu-items-section";
 
 export const AdminPanel = () => {
     const {
@@ -16,13 +18,16 @@ export const AdminPanel = () => {
     return (
         <Box
             component="article"
-            p={8}
+            padding={8}
+            gap={3}
             display="flex"
             flexDirection="column"
             justifyContent="center"
             alignItems="center"
         >
-            <Typography variant="h3" color="primary" mb={8}>droze. Restorator Pannel</Typography>
+
+            <Typography variant="h3" color="primary">droze. Restorator Pannel</Typography>
+
             <Box
                 display="flex"
                 justifyContent="center"
@@ -37,6 +42,17 @@ export const AdminPanel = () => {
                     logout={logoutMutation}
                 />
             </Box>
+
+            <Box
+                display="flex"
+                justifyContent="center"
+                gap={3}
+            >
+
+                <MenuCategoriesListSection />
+                <MenuItemsList />
+            </Box>
+
         </Box>
     )
 };
