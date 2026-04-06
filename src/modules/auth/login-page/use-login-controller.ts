@@ -43,7 +43,7 @@ export const useLoginCardController = () => {
 			setUserPhone(decode?.phone);
 			setUserFullName(decode?.fullName);
 
-			showToast("Login Successful");
+			showToast("Login Successful", "success");
 
 			navigate("/admin-panel");
 		}
