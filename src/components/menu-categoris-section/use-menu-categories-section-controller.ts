@@ -15,6 +15,7 @@ export const useMenuCategoriesSectionController = () => {
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
 
     const [category, setCategory] = useState<string>("");
+    const [rowToEditDelete, setRowToEditDelete] = useState<string>("");
 
     const { isPending, data: categories, refetch: refetchCategories } = useQuery({
         queryKey: ["categoriesList", venueId],
@@ -27,6 +28,8 @@ export const useMenuCategoriesSectionController = () => {
             addMenuCategory({ venueId, category }, accessToken),
         onSuccess: () => {
             refetchCategories();
+            setRowToEditDelete("");
+            setCategory("");
             setAnchorEl(null);
             showToast("Menu Category Added Successfully", "success");
         },
@@ -41,6 +44,8 @@ export const useMenuCategoriesSectionController = () => {
             changeMenuCategoryDetails(body, accessToken),
         onSuccess: () => {
             refetchCategories();
+            setRowToEditDelete("");
+            setCategory("");
             setAnchorEl(null);
             showToast("Menu Category Renamed Successfully", "success");
         },
@@ -55,6 +60,7 @@ export const useMenuCategoriesSectionController = () => {
             deleteMenuCategory(categoryId, accessToken),
         onSuccess: () => {
             refetchCategories();
+            setRowToEditDelete("");
             showToast("Menu Category Deleted Successfully", "success");
             setIsDeleteDialogOpen(false);
         },
@@ -68,12 +74,15 @@ export const useMenuCategoriesSectionController = () => {
         venueId,
         selectedRowId,
         setSelectedRowId,
+        rowToEditDelete,
+        setRowToEditDelete,
+        category,
+        setCategory,
+        showToast,
         anchorEl,
         setAnchorEl,
         isDeleteDialogOpen,
         setIsDeleteDialogOpen,
-        category,
-        setCategory,
         isPending,
         categories,
         refetchCategories,

@@ -1,10 +1,10 @@
-import { Button, Popover, Stack, TextField, Typography } from "@mui/material";
+import { Button, Popover, Stack, TextField } from "@mui/material";
 import type { UseMutateFunction } from "@tanstack/react-query";
+import { useState } from "react";
 
 type MenuCategoriesPopoverType = {
     anchorEl: HTMLButtonElement | null;
     setAnchorEl: (param: any) => void;
-    venueId: string;
     setCategory: (param: any) => void;
     addMenuCategoryMutation: () => void;
     changeMenuCategoryMutation: UseMutateFunction<{}, {}, { id: string; category: string; }>;
@@ -13,15 +13,21 @@ type MenuCategoriesPopoverType = {
 };
 
 export const MenuCategoriesPopover = (
-    { anchorEl, setAnchorEl, venueId,
-        setCategory, addMenuCategoryMutation, changeMenuCategoryMutation,
+    { anchorEl, setAnchorEl, setCategory,
+        addMenuCategoryMutation, changeMenuCategoryMutation,
         categoryId, category }: MenuCategoriesPopoverType
 ) => {
+
+    const [isAcceptable, setIsAcceptable] = useState<boolean>(true);
+
     return (
         <Popover
             open={!!anchorEl}
             anchorEl={anchorEl}
-            onClose={() => setAnchorEl(null)}
+            onClose={() => {
+                setAnchorEl(null);
+                setIsAcceptable(true);
+            }}
             anchorOrigin={{
                 vertical: 'top',
                 horizontal: 'center',
@@ -39,27 +45,38 @@ export const MenuCategoriesPopover = (
             }}
         >
             <Stack
+                component="form"
                 direction="column"
                 padding={3}
                 gap={2}
+                onSubmit={(event) => {
+                    event.preventDefault();
+                    if (!category) {
+                        setIsAcceptable(false);
+                        return;
+                    }
+                    setIsAcceptable(true);
+                    categoryId
+                        ? changeMenuCategoryMutation({ id: categoryId, category: category! })
+                        : addMenuCategoryMutation();
+                }}
             >
-                {venueId ?
-                    <>
-                        <TextField
-                            value={categoryId ? category : undefined}
-                            onChange={(event) => setCategory(event.target.value)}
-                        />
-                        <Button
-                            variant="outlined"
-                            onClick={() => categoryId ?
-                                changeMenuCategoryMutation({ id: categoryId, category: category! }) :
-                                addMenuCategoryMutation()}
-                        >
-                            {categoryId ? "Rename Category" : "Add Category"}
-                        </Button>
-                    </> :
-                    <Typography>Please select a venue to add a menu category</Typography>
-                }
+                <TextField
+                    size="small"
+                    placeholder="Menu category"
+                    value={categoryId ? category : undefined}
+                    onChange={(event) => {
+                        setCategory(event.target.value);
+                        if (!isAcceptable) setIsAcceptable(true);
+                    }}
+                    error={!isAcceptable}
+                    helperText={
+                        !isAcceptable && "Must not be empty"
+                    }
+                />
+                <Button variant="outlined" type="submit">
+                    {categoryId ? "Rename Category" : "Add Category"}
+                </Button>
             </Stack>
         </Popover >
     );

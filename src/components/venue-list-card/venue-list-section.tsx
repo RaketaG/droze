@@ -28,6 +28,7 @@ export const VenueListCard = () => {
         setDeleteDialogSettings,
         selectedRowId,
         setSelectedRowId,
+        setCategoryId,
         page,
         setPage,
         rows,
@@ -124,6 +125,7 @@ export const VenueListCard = () => {
                                 <TableRow
                                     key={row.id} hover selected={selectedRowId === row.id}
                                     onClick={() => {
+                                        setCategoryId("");
                                         selectedRowId === row.id ? setSelectedRowId("") : setSelectedRowId(row.id);
                                     }}
                                 >
@@ -132,18 +134,20 @@ export const VenueListCard = () => {
                                     <CellWithTooltip populateText={row.email} />
                                     <CellWithTooltip populateText={row.phone} />
                                     <TableCell>
-                                        <Button onClick={() => {
+                                        <Button onClick={(event) => {
+                                            event.stopPropagation();
                                             setChangeDetailsBody(row);
                                             setIsAddChangeOpen(true);
                                         }}>
                                             <EditIcon />
                                         </Button>
-                                        <Button color="error" onClick={() =>
+                                        <Button color="error" onClick={(event) => {
+                                            event.stopPropagation();
                                             setDeleteDialogSettings({
                                                 isOpen: true,
                                                 venueId: row.id
-                                            })
-                                        }>
+                                            });
+                                        }}>
                                             <DeleteIcon />
                                         </Button>
                                     </TableCell>

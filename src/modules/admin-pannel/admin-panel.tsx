@@ -5,7 +5,7 @@ import { VenueListCard } from "../../components/venue-list-card/venue-list-secti
 import { useLogoutCardController } from "../auth/login-page/use-logout-controller";
 import { DrozeAdminCard } from "../../components/droze-admin-card/droze-admin-card";
 import { MenuCategoriesListSection } from "../../components/menu-categoris-section/menu-categories-section";
-import { MenuItemsList } from "../../components/menu-items-section/menu-items-section";
+import { MenuItemsSection } from "../../components/menu-items-section/menu-items-section";
 
 export const AdminPanel = () => {
     const {
@@ -50,7 +50,7 @@ export const AdminPanel = () => {
             >
 
                 <MenuCategoriesListSection />
-                <MenuItemsList />
+                <MenuItemsSection />
             </Box>
 
         </Box>

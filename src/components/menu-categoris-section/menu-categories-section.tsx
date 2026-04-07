@@ -1,4 +1,4 @@
-import { Box, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material";
+import { Box, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
@@ -13,12 +13,15 @@ export const MenuCategoriesListSection = () => {
         venueId,
         selectedRowId,
         setSelectedRowId,
+        rowToEditDelete,
+        setRowToEditDelete,
+        category,
+        setCategory,
+        showToast,
         anchorEl,
         setAnchorEl,
         isDeleteDialogOpen,
         setIsDeleteDialogOpen,
-        category,
-        setCategory,
         categories,
         addMenuCategoryMutation,
         changeMenuCategoryMutation,
@@ -41,20 +44,19 @@ export const MenuCategoriesListSection = () => {
             <MenuCategoriesPopover
                 anchorEl={anchorEl}
                 setAnchorEl={setAnchorEl}
-                venueId={venueId}
                 setCategory={setCategory}
                 addMenuCategoryMutation={addMenuCategoryMutation}
                 changeMenuCategoryMutation={changeMenuCategoryMutation}
-                categoryId={selectedRowId}
+                categoryId={rowToEditDelete}
                 category={category}
             />
             <DrozeDialogBox
                 isOpen={isDeleteDialogOpen}
                 handleClose={() => setIsDeleteDialogOpen(false)}
-                handleAction={() => deleteMenuCategoryMutation(selectedRowId)}
-                titleText="You are deleting the venue."
+                handleAction={() => deleteMenuCategoryMutation(rowToEditDelete)}
+                titleText="You are deleting the menu category."
                 contentText="This action is ireversible,
-                    after you delete the venue the only way 
+                    after you delete the menu category the only way 
                     to get all the information back is to set up it from scratch."
                 positiveBtnText="Confirm Delete"
                 negativeBtnText="Cancel"
@@ -72,7 +74,11 @@ export const MenuCategoriesListSection = () => {
                 <Button
                     sx={{ padding: 0 }}
                     onClick={(event) => {
-                        setAnchorEl(event.currentTarget);
+                        setRowToEditDelete("");
+                        setCategory("");
+                        venueId ?
+                            setAnchorEl(event.currentTarget) :
+                            showToast("Please select a venue first", "error");
                     }}>
                     <AddIcon />
                 </Button>
@@ -112,6 +118,8 @@ export const MenuCategoriesListSection = () => {
                                             <TableCell align="center" sx={{ px: 0 }}>
                                                 <Button
                                                     onClick={(event) => {
+                                                        event.stopPropagation();
+                                                        setRowToEditDelete(item.id);
                                                         setCategory(item.category);
                                                         setAnchorEl(event.currentTarget);
                                                     }}
@@ -120,8 +128,11 @@ export const MenuCategoriesListSection = () => {
                                                 </Button>
                                                 <Button
                                                     color="error"
-                                                    onClick={() => setIsDeleteDialogOpen(true)}
-                                                >
+                                                    onClick={(event) => {
+                                                        event.stopPropagation();
+                                                        setRowToEditDelete(item.id);
+                                                        setIsDeleteDialogOpen(true);
+                                                    }}>
                                                     <DeleteIcon />
                                                 </Button>
                                             </TableCell>
@@ -130,7 +141,7 @@ export const MenuCategoriesListSection = () => {
                             </TableBody>
                         </Table>
                     </TableContainer> :
-                    <Typography>Venue not yet selected</Typography>
+                    <Typography>Venue is not yet selected</Typography>
                 }
             </Box>
         </Box>

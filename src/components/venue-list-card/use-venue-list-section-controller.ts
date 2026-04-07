@@ -9,7 +9,7 @@ export const useVenueListCardController = () => {
     const { accessToken, userId } = useAuth();
     const { showToast } = useToast();
 
-    const { venueId: selectedRowId, setVenueId: setSelectedRowId } = useManage();
+    const { venueId: selectedRowId, setVenueId: setSelectedRowId, setCategoryId } = useManage();
 
     const [isAddChangeOpen, setIsAddChangeOpen] = useState<boolean>(false);
     const [changeDetailsBody, setChangeDetailsBody] = useState<VenueListType | undefined>();
@@ -89,6 +89,7 @@ export const useVenueListCardController = () => {
         setDeleteDialogSettings,
         selectedRowId,
         setSelectedRowId,
+        setCategoryId,
         page,
         setPage,
         isPending,
