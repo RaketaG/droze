@@ -4,13 +4,14 @@ const PersonalDetailsListItem = (
     { fieldName, fieldValue }: { fieldName: string, fieldValue: string }
 ) => {
     return (
-        <Stack
-            direction="row"
-            gap={2}
-        >
-            <Typography color="primary" fontWeight="bold">{fieldName}:</Typography>
+        <Stack direction="row" gap={2}>
+            <Typography color="primary" fontWeight="bold" minWidth={85}>
+                {fieldName}:
+            </Typography>
             <Tooltip title={fieldValue} arrow placement="bottom-start">
-                <Typography noWrap>{fieldValue}</Typography>
+                <Typography noWrap flex={1}>
+                    {fieldValue}
+                </Typography>
             </Tooltip>
         </Stack>
     );

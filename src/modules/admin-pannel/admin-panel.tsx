@@ -18,12 +18,14 @@ export const AdminPanel = () => {
     return (
         <Box
             component="article"
-            padding={8}
+            padding={4}
             gap={3}
             display="flex"
             flexDirection="column"
             justifyContent="center"
             alignItems="center"
+            minWidth="fit-content"
+            minHeight="fit-content"
         >
 
             <Typography variant="h3" color="primary">droze. Restorator Pannel</Typography>
