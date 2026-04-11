@@ -62,11 +62,13 @@ export const LoginCard = () => {
 							>
 								<DrozeTextField
 									name="username"
+									label="Username"
 									placeholder="Username"
 									size="small"
 								/>
 								<DrozeTextField
 									name="password"
+									label="Password"
 									placeholder="Password"
 									type="password"
 									size="small"

@@ -1,4 +1,4 @@
-import { Button, Popover, Stack, TextField } from "@mui/material";
+import { Button, Popover, Stack, TextField, Typography } from "@mui/material";
 import type { UseMutateFunction } from "@tanstack/react-query";
 import { useState } from "react";
 
@@ -63,7 +63,8 @@ export const MenuCategoriesPopover = (
             >
                 <TextField
                     size="small"
-                    placeholder="Menu category"
+                    label="Menu Category"
+                    placeholder="Menu Category"
                     value={categoryId ? category : undefined}
                     onChange={(event) => {
                         setCategory(event.target.value);

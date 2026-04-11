@@ -68,27 +68,32 @@ export const RegistrationCard = () => {
 								>
 									<DrozeTextField
 										name="username"
+										label="Username"
 										placeholder="Username"
 										size="small"
 									/>
 									<DrozeTextField
 										name="password"
+										label="Password"
 										placeholder="Password"
 										size="small"
 										type="password"
 									/>
 									<DrozeTextField
 										name="email"
+										label="Email"
 										placeholder="Email"
 										size="small"
 									/>
 									<DrozeTextField
 										name="phone"
+										label="Phone"
 										placeholder="Phone"
 										size="small"
 									/>
 									<DrozeTextField
 										name="role"
+										label="Role"
 										placeholder="Role"
 										size="small"
 										slotProps={{
@@ -99,6 +104,7 @@ export const RegistrationCard = () => {
 									/>
 									<DrozeTextField
 										name="fullName"
+										label="Full Name"
 										placeholder="Full Name"
 										size="small"
 									/>

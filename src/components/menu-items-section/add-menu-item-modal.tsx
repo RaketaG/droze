@@ -77,6 +77,7 @@ export const AddMenuItemModal = (
 								<DrozeTextField
 									fullWidth
 									name="itemName"
+									label="Menu Item"
 									placeholder="Menu Item"
 									size="small"
 								/>
@@ -85,6 +86,7 @@ export const AddMenuItemModal = (
 								<DrozeTextField
 									fullWidth
 									name="itemPrice"
+									label="Price"
 									placeholder="Price"
 									size="small"
 								/>
@@ -110,6 +112,7 @@ export const AddMenuItemModal = (
 									fullWidth
 									multiline
 									name="description"
+									label="Description"
 									placeholder="Description"
 									size="small"
 								/>

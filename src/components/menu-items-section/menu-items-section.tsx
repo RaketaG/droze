@@ -82,7 +82,7 @@ export const MenuItemsSection = () => {
                     </Typography>
                     {venueId ?
                         <Typography color="primary" fontWeight="bold">
-                            {categoryId ? "Category Specific Items" : "Full List Of Items"}
+                            {categoryId ? "Category Specific Items" : "Full List of Items"}
                         </Typography> :
                         null
                     }

@@ -78,6 +78,7 @@ export const AddVenueModal = (
 								<DrozeTextField
 									fullWidth
 									name="name"
+									label="Venue name"
 									placeholder="Venue name"
 									size="small"
 								/>
@@ -86,6 +87,7 @@ export const AddVenueModal = (
 								<DrozeTextField
 									fullWidth
 									name="address"
+									label="Address"
 									placeholder="Address"
 									size="small"
 								/>
@@ -94,6 +96,7 @@ export const AddVenueModal = (
 								<DrozeTextField
 									fullWidth
 									name="email"
+									label="Email"
 									placeholder="Email"
 									size="small"
 								/>
@@ -102,6 +105,7 @@ export const AddVenueModal = (
 								<DrozeTextField
 									fullWidth
 									name="phone"
+									label="Phone"
 									placeholder="Phone"
 									size="small"
 								/>
