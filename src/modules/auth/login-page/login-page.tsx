@@ -12,9 +12,10 @@ export const LoginCard = () => {
 
 	return (
 		<Box
-			height="100vh"
-			width={"100vw"}
+			minHeight="100vh"
+			minWidth="fit-content"
 			component="article"
+			padding={4}
 			display="flex"
 			justifyContent="center"
 			alignItems="center"
@@ -86,6 +87,7 @@ export const LoginCard = () => {
 									color="primary"
 									variant="text"
 									onClick={() => navigate("/registration")}
+									sx={{ mt: 1 }}
 								> Create an account </Button>
 							</Box >
 						</Form>

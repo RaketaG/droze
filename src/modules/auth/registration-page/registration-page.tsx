@@ -24,9 +24,10 @@ export const RegistrationCard = () => {
 			</Button>
 
 			<Box
-				height="100vh"
-				width={"100vw"}
+				minHeight="100vh"
+				minWidth="fit-content"
 				component="article"
+				padding={4}
 				display="flex"
 				justifyContent="center"
 				alignItems="center"
