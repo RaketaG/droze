@@ -12,7 +12,7 @@ export const DrozeTextField = (
                 fullWidth
                 {...props}
                 {...field}
-                error={(meta.touched && meta.error) as boolean}
+                error={Boolean(meta.touched && meta.error)}
             />
             <Typography
                 color="error"
