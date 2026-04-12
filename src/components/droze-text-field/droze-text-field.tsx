@@ -7,7 +7,7 @@ export const DrozeTextField = (
     const [field, meta] = useField(props.name as string);
 
     return (
-        <Box width="100%">
+        <Box width="100%" marginBottom={1}>
             <TextField
                 fullWidth
                 {...props}
