@@ -31,7 +31,7 @@ export const LoginCard = () => {
 				padding={8}
 				borderRadius={3}
 			>
-				<Typography fontSize={68}>droze.</Typography>
+				<Typography fontSize={68} color="primary">droze.</Typography>
 
 				<Box
 					width={0.6}
